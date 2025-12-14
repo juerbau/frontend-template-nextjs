@@ -5,7 +5,7 @@ export function GetUserButton() {
         try {
 
             console.log('3️⃣ User holen');
-            const userRes = await fetch('http://localhost:8000/user', {
+            const userRes = await fetch('http://localhost:8000/api/user', {
                 credentials: 'include',
                 headers: {
                     'Accept': 'application/json',

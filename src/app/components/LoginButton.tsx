@@ -11,6 +11,8 @@ export function LoginButton() {
             if (match) {
                 // match[2] enthält den kodierten Wert (z.B. mit %2F)
                 // **DIES IST DER ENTSCHEIDENDE SCHRITT:**
+                console.log(match);
+                console.log(match[2]);
                 return decodeURIComponent(match[2]);
             }
             return '';
@@ -21,18 +23,16 @@ export function LoginButton() {
             await fetch('http://localhost:8000/sanctum/csrf-cookie', {
                 credentials: 'include',
             });
-            console.log(document.cookie);
-
-            const csrfToken = getDecodedCsrfToken();
+            //console.log(document.cookie);
 
             console.log('2️⃣ Login');
+            const csrfToken = getDecodedCsrfToken();
+            console.log(csrfToken);
 
-            const xsrfToken = csrfToken;
-
-            if (!xsrfToken) {
+            if (!csrfToken) {
                 console.error('Kein XSRF-Token gefunden');
             } else {
-                console.log(xsrfToken);
+                console.log('XSRF-Token gefunden');
             }
 
             const loginRes = await fetch('http://localhost:8000/login', {
@@ -42,7 +42,7 @@ export function LoginButton() {
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
-                    'X-XSRF-TOKEN': xsrfToken
+                    'X-XSRF-TOKEN': csrfToken
                 },
 
                 body: JSON.stringify({
