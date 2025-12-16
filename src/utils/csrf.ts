@@ -26,8 +26,7 @@ export function getCsrfToken(): string | null {
         try {
             // Dekodierung des Tokens, um URL-Zeichen (%3D, etc.) zu entfernen,
             // da Laravel den dekodierten Wert im Header erwartet.
-            const decodedToken: string = decodeURIComponent(match[1]);
-            return decodedToken;
+            return decodeURIComponent(match[1]);
         } catch (e) {
             console.error("Fehler beim Dekodieren des CSRF-Tokens:", e);
             return null;

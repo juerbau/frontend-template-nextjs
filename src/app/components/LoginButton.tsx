@@ -1,9 +1,12 @@
 'use client';
 
+import {json} from "node:stream/consumers";
+import {setCookie} from "undici-types";
+
 export function LoginButton() {
     async function handleLogin() {
 
-        function getDecodedCsrfToken() {
+        /*function getDecodedCsrfToken() {
             const name = 'XSRF-TOKEN';
             // Sucht das Cookie 'XSRF-TOKEN' im document.cookie String
             const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
@@ -60,7 +63,41 @@ export function LoginButton() {
         } catch (e) {
             console.error('🔥 Fehler im Login', e);
         }
+    }*/
+
+        try {
+            console.log('Login gestartet');
+
+            const loginRes = await fetch('http://localhost:8000/api/login-api', {
+                method: 'POST',
+                //credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+
+                body: JSON.stringify({
+                    email: 'test@example.com',
+                    password: 'password',
+                }),
+            });
+
+            if (!loginRes.ok) {
+                console.error('❌ Login fehlgeschlagen', loginRes.status);
+                return;
+            }
+
+            console.log('Login erfolgreich');
+            const {user, token} = await loginRes.json()
+            localStorage.setItem('api_token', token);
+            console.log(user.name);
+            console.log (token);
+
+        } catch (e) {
+            console.error('🔥 Fehler im Login', e);
+        }
     }
+
 
     return (
         <button onClick={handleLogin}>
