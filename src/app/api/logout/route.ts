@@ -21,7 +21,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ message: 'Logout fehlgeschlagen.' }, { status: response.status });
         }
 
-        // --- HIER BEGINNT DER NEUE, EXPLIZITE LÖSCHMECHANISMUS ---
+        // --- HIER BEGINNT DER EXPLIZITE LÖSCHMECHANISMUS ---
 
         // 1. Erstellen der Basis-Antwort
         const nextResponse = NextResponse.json({ message: 'Logout erfolgreich.' }, { status: 200 });

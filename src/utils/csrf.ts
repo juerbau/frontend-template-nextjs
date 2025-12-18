@@ -1,5 +1,26 @@
 // utils/csrf.ts
 
+/*try {
+    console.log('1️⃣ CSRF holen');
+    await fetch('http://localhost:8000/sanctum/csrf-cookie', {
+        credentials: 'include',
+    });
+    //console.log(document.cookie);
+
+    console.log('2️⃣ Login');
+    const csrfToken = getDecodedCsrfToken();
+    console.log(csrfToken);
+
+    if (!csrfToken) {
+        console.error('Kein XSRF-Token gefunden');
+    } else {
+        console.log('XSRF-Token gefunden');
+    }
+
+} catch (e) {
+    console.error('🔥 Fehler', e);
+}*/
+
 /**
  * Liest den XSRF-TOKEN-Cookie aus dem Browser-Speicher (document.cookie),
  * dekodiert ihn (da er URL-encoded ist) und gibt den sauberen String zurück.

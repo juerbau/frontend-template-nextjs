@@ -1,14 +1,28 @@
 'use client';
 
+import {getCsrfToken} from "@/utils/csrf";
+
 export function GetUserButton() {
     async function handleGetUser() {
+
+        const csrfToken = getCsrfToken();
+
+        if (!csrfToken) {
+            console.log('❌ Fehler: CSRF-Token fehlt. Bitte zuerst einloggen.');
+            return;
+        }
+
         try {
 
             console.log('3️⃣ User holen');
             const userRes = await fetch('http://localhost:8000/api/user', {
+                method: 'GET',
                 credentials: 'include',
                 headers: {
+                    'Content-Type': 'application/json',
                     'Accept': 'application/json',
+                    // 2. KRITISCH: Senden des dekodierten Tokens im Header
+                    'X-XSRF-TOKEN': csrfToken
                 },
             });
 

@@ -4,6 +4,7 @@
 import {LoginButton} from "@/app/components/LoginButton";
 import {GetUserButton} from "@/app/components/GetUserButton";
 import {LogoutButton} from "@/app/components/LogoutButton";
+import Link from "next/link";
 
 export default function Page() {
     // const [me, setMe] = useState<any>(null);
@@ -60,11 +61,10 @@ export default function Page() {
 
     return (
         <div>
-            <LoginButton />
-            <GetUserButton />
-            <LogoutButton />
-
-            {/*<div>*/}
+            <h1>Zugang mittels API-Token</h1>
+            <p><Link href='/login'>login</Link></p>
+            <p><Link href='login-api'>API Login</Link></p>
+            {/*<div>*/}^
             {/*    <button onClick={getCsrf}>Get CSRF</button>*/}
             {/*</div>*/}
             {/*<div>*/}

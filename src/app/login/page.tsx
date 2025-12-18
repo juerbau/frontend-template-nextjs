@@ -3,6 +3,8 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import {getCsrfToken} from "@/utils/csrf";
+import Link from "next/link";
 
 
 // Wir rufen den internen Next.js Route Handler an: /login
@@ -15,6 +17,7 @@ export default function LoginPage() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const router = useRouter();
+    const [loginStatus, setLoginStatus] = useState(false);
 
     /**
      * Behandelt die Formularübermittlung
@@ -50,9 +53,9 @@ export default function LoginPage() {
             if (response.ok) {
                 // Erfolg: Die Cookies wurden im Route Handler gesetzt.
                 console.log('✅ Login erfolgreich. Session-Cookies gesetzt.');
-
+                setLoginStatus(true);
                 // Zum Dashboard oder einer anderen geschützten Seite navigieren
-                router.push('/dashboard');
+                //router.push('/dashboard');
 
             } else {
                 // Fehlerbehandlung
@@ -83,7 +86,7 @@ export default function LoginPage() {
 
             if (response.ok) {
                 console.log('✅ Logout erfolgreich. Session gelöscht.');
-
+                setLoginStatus(false);
                 // Zur Login-Seite navigieren
                 //router.push('/login');
             } else {
@@ -95,9 +98,51 @@ export default function LoginPage() {
         }
     }
 
+    async function handleGetUser() {
+
+        const csrfToken = getCsrfToken();
+
+        if (!csrfToken) {
+            console.log('❌ Fehler: CSRF-Token fehlt. Bitte zuerst einloggen.');
+            return;
+        }
+
+        try {
+
+            console.log('3️⃣ User holen');
+            const userRes = await fetch('http://localhost:8000/api/user', {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    // 2. KRITISCH: Senden des dekodierten Tokens im Header
+                    'X-XSRF-TOKEN': csrfToken
+                },
+            });
+
+            if (!userRes.ok) {
+                console.error('❌ User nicht authentifiziert', userRes.status);
+                return;
+            }
+
+            const user = await userRes.json();
+            console.log('✅ User:', user.name);
+
+
+        } catch (e) {
+            console.error('🔥 Fehler in GetUser', e);
+        }
+    }
+
     return (
         <div style={{ padding: '20px', maxWidth: '400px', margin: '50px auto', border: '1px solid #ccc' }}>
-            <button type='button' onClick={handleLogout}>Logout</button>
+            {loginStatus && (
+                <>
+                <button type='button' onClick={handleGetUser}>GetUser</button>
+                <button type='button' onClick={handleLogout}>Logout</button>
+            </>
+            )}
             <h2>Login</h2>
             <form onSubmit={handleSubmit}>
                 {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -123,6 +168,7 @@ export default function LoginPage() {
                         required
                     />
                 </div>
+                {loginStatus && <div><Link href='/dashboard'>Dashboard</Link></div>}
 
                 <button type="submit" style={{ marginTop: '20px' }}>Einloggen</button>
             </form>
