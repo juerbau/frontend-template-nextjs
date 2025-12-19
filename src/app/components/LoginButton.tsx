@@ -1,7 +1,7 @@
 'use client';
 
 
-const NEXTJS_LOGIN_URL = '/api/login-api';
+const NEXTJS_LOGIN_URL = '/http/api/login-api';
 
 export function LoginButton() {
     async function handleLogin() {

@@ -8,8 +8,8 @@ import Link from "next/link";
 
 
 // Wir rufen den internen Next.js Route Handler an: /login
-const NEXTJS_LOGIN_ENDPOINT = '/api/login';
-const NEXTJS_LOGOUT_ENDPOINT = '/api/logout';
+const NEXTJS_LOGIN_ENDPOINT = '/http/login';
+const NEXTJS_LOGOUT_ENDPOINT = '/http/logout';
 
 
 export default function LoginPage() {
